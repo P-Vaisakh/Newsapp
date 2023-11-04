@@ -1,1 +1,1 @@
-export const base = `https://newsdata.io/api/1/news?apikey=pub_32377e4bb25a511277fc564bc819abff94ba0`;
+export const base = `https://newsdata.io/api/1/news?apikey=pub_32377e4bb25a511277fc564bc819abff94ba0&language=en`;

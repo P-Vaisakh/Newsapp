@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -10,16 +10,22 @@ const Header = () => {
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <img style={{height:"25px", borderRadius:"2px"}} src="https://i.postimg.cc/MT8ZY9gv/news.jpg" alt="" />
+          <img
+            style={{ height: "25px", borderRadius: "2px" }}
+            src="https://i.postimg.cc/MT8ZY9gv/news.jpg"
+            alt=""
+          />
           <Navbar.Brand href="#">DailyNews</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav
               className="me-auto my-2 my-lg-0"
-              style={{ maxHeight: "100px" }}
+              style={{ maxHeight: "400px" }}
               navbarScroll
             >
-              <Nav.Link href="#action1"className='active'>Top Headlines</Nav.Link>
+              <Nav.Link href="#action1" className="active">
+                Top Headlines
+              </Nav.Link>
               <Nav.Link href="#action2">World</Nav.Link>
               <Nav.Link href="#action3">Bussiness</Nav.Link>
               <Nav.Link href="#action4">Entertainment</Nav.Link>
@@ -29,8 +35,6 @@ const Header = () => {
               <Nav.Link href="#action8">Science</Nav.Link>
               <Nav.Link href="#action9">Sports</Nav.Link>
               <Nav.Link href="#action10">Technology</Nav.Link>
-             
-             
             </Nav>
             <Form className="d-flex">
               <Form.Control
@@ -46,6 +50,6 @@ const Header = () => {
       </Navbar>
     </div>
   );
-}
+};
 
-export default Header
+export default Header;
