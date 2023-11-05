@@ -1,50 +1,52 @@
 import React, { useEffect, useState } from "react";
 import { fetchNews, fetchNextPage } from "../Api/allReq";
 import "./home.css";
-import { Col, Container, Row } from "react-bootstrap";
-import { Activity, Bookmark } from "react-feather";
+import { Col, Container, Pagination, Row } from "react-bootstrap";
+import { Bookmark } from "react-feather";
+import Spinner from "react-bootstrap/Spinner";
 const Home = () => {
   const [news, setNews] = useState([]);
   const [nextPage, setNextPage] = useState("");
+  const [pages, setPages] = useState([]);
 
   const getNews = async () => {
     const { data } = await fetchNews();
     setNews(data.results);
     setNextPage(data.nextPage);
+    setPages([...pages, data.nextPage]);
   };
 
   const getNextPage = async (pageId) => {
     const { data } = await fetchNextPage(pageId);
     setNextPage(data.nextPage);
     setNews(data.results);
+    !pages.includes(data.nextPage) && setPages([...pages, data.nextPage]);
   };
 
   useEffect(() => {
     getNews();
   }, []);
 
-  console.log("page is", news);
-
   return (
     <div>
       <p className="head">Daily News Pulse: Stay Informed Every Day</p>
-      <Container>
+      <Container id="top">
         <Row>
           {news.length > 0 ? (
             news.map((i, index) => (
               <>
                 <Col className="mb-3 mt-3" lg={3} md={4} key={index}>
-                  <div class="card">
-                    <div class="body">
+                  <div className="card">
+                    <div className="body">
                       <p className="textTitle">{i.title}</p>
-                      <p class="text">
+                      <p className="text">
                         {i.description?.length > 100
                           ? i.description.slice(0, 100) + "..."
                           : i.description}{" "}
                       </p>
-                      <span class="username">from: {i.creator}</span>
-                      <span class="username"> {i.pubDate}</span>
-                      <div class="footer">
+                      <span className="username">from: {i.creator}</span>
+                      <span className="username"> {i.pubDate}</span>
+                      <div className="footer">
                         <div>
                           <div>
                             <Bookmark></Bookmark> {i.source_priority}
@@ -57,20 +59,37 @@ const Home = () => {
               </>
             ))
           ) : (
-            <p>not found</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
+              <Spinner animation="border" role="status">
+                <span className="visually-hidden"></span>
+              </Spinner>
+            </div>
           )}
         </Row>
       </Container>
       <div
         style={{
+          width: "100%",
           textAlign: "end",
           paddingRight: "20px",
           paddingBottom: "20px",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
-        <button className="button-31" onClick={() => getNextPage(nextPage)}>
-          next page
-        </button>
+        <Pagination style={{ marginTop: "30px" }}>
+          <Pagination.Prev
+            disabled={pages.length > 2 ? false : true}
+            onClick={() => getNextPage(pages[pages.length - 3])}
+          />
+          <Pagination.Next onClick={() => getNextPage(nextPage)} href="#top" />
+        </Pagination>
       </div>{" "}
     </div>
   );
