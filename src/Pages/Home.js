@@ -34,7 +34,7 @@ const Home = ({ searchResults, category }) => {
       getCategory();
     }
   }, [searchResults, category]);
-
+console.log(news);
   return (
     <div>
       <p className="head">Daily News Pulse: Stay Informed Every Day</p>
@@ -44,25 +44,27 @@ const Home = ({ searchResults, category }) => {
             news.map((i, index) => (
               <>
                 <Col className="mb-3 mt-3" lg={3} md={4} key={index}>
-                  <div className="card">
-                    <div className="body">
-                      <p className="textTitle">{i.title}</p>
-                      <p className="text">
-                        {i.description?.length > 100
-                          ? i.description.slice(0, 100) + "..."
-                          : i.description}{" "}
-                      </p>
-                      <span className="username">from: {i.creator}</span>
-                      <span className="username"> {i.pubDate}</span>
-                      <div className="footer">
-                        <div>
+                 <a style={{textDecoration:"none"}} href={i.link}>
+                    <div className="card">
+                      <div className="body">
+                        <p className="textTitle">{i.title}</p>
+                        <p className="text">
+                          {i.description?.length > 100
+                            ? i.description.slice(0, 100) + "..."
+                            : i.description}{" "}
+                        </p>
+                        <span className="username">from: {i.creator}</span>
+                        <span className="username"> {i.pubDate}</span>
+                        <div className="footer">
                           <div>
-                            <Bookmark></Bookmark> {i.source_priority}
+                            <div>
+                              <Bookmark></Bookmark> {i.source_priority}
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
+                 </a>
                 </Col>
               </>
             ))
