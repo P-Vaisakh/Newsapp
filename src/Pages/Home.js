@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { fetchNews, fetchNextPage } from "../Api/allReq";
+import { fetchCategory, fetchNews, fetchNextPage } from "../Api/allReq";
 import "./home.css";
 import { Col, Container, Pagination, Row } from "react-bootstrap";
 import { Bookmark } from "react-feather";
 import Spinner from "react-bootstrap/Spinner";
-const Home = () => {
+
+const Home = ({ searchResults, category }) => {
   const [news, setNews] = useState([]);
   const [nextPage, setNextPage] = useState("");
   const [pages, setPages] = useState([]);
-
-  const getNews = async () => {
-    const { data } = await fetchNews();
-    setNews(data.results);
-    setNextPage(data.nextPage);
-    setPages([...pages, data.nextPage]);
-  };
 
   const getNextPage = async (pageId) => {
     const { data } = await fetchNextPage(pageId);
@@ -23,9 +17,23 @@ const Home = () => {
     !pages.includes(data.nextPage) && setPages([...pages, data.nextPage]);
   };
 
+  const getCategory = async () => {
+    let { data } = await fetchCategory(category);
+    setNews(data.results);
+    setNextPage(data.nextPage);
+    setPages([...pages, data.nextPage]);
+  };
+
   useEffect(() => {
-    getNews();
-  }, []);
+    if (searchResults.results?.length > 0) {
+      setNews(searchResults.results);
+      setNextPage(searchResults.nextPage);
+      setPages([]);
+      setPages([...pages, searchResults.nextPage]);
+    } else if (category) {
+      getCategory();
+    }
+  }, [searchResults, category]);
 
   return (
     <div>
@@ -85,6 +93,7 @@ const Home = () => {
       >
         <Pagination style={{ marginTop: "30px" }}>
           <Pagination.Prev
+            href="#top"
             disabled={pages.length > 2 ? false : true}
             onClick={() => getNextPage(pages[pages.length - 3])}
           />

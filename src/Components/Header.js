@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import NavDropdown from "react-bootstrap/NavDropdown";
-const Header = () => {
+import { fetchSearchResults } from "../Api/allReq";
+
+const Header = ({
+  setsearchResults,
+  setcategory,
+}) => {
+
+    const [searchValue, setSearchValue] = useState("");
+
+    const [isActive, setisActive] = useState()
+
+  const searchTermFetch = async () => {
+    let { data } = await fetchSearchResults(searchValue);
+    setsearchResults(data);
+  };
+
+  const handleInput = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const subjects = [
+    "Top",
+    "World",
+    "Business",
+    "Entertainment",
+    "Food",
+    "Health",
+    "Politics",
+    "Science",
+    "Sports",
+    "Technology",
+  ];
+
   return (
     <div>
       <Navbar expand="lg" className="bg-body-tertiary">
@@ -23,18 +54,19 @@ const Header = () => {
               style={{ maxHeight: "400px" }}
               navbarScroll
             >
-              <Nav.Link href="#action1" className="active">
-                Top Headlines
-              </Nav.Link>
-              <Nav.Link href="#action2">World</Nav.Link>
-              <Nav.Link href="#action3">Bussiness</Nav.Link>
-              <Nav.Link href="#action4">Entertainment</Nav.Link>
-              <Nav.Link href="#action5">Food</Nav.Link>
-              <Nav.Link href="#action6">Health</Nav.Link>
-              <Nav.Link href="#action7">Politics</Nav.Link>
-              <Nav.Link href="#action8">Science</Nav.Link>
-              <Nav.Link href="#action9">Sports</Nav.Link>
-              <Nav.Link href="#action10">Technology</Nav.Link>
+              {subjects.length > 0 &&
+                subjects.map((item, ind) => (
+                  <Nav.Link
+                    key={ind}
+                    style={{fontWeight:500}}
+                    onClick={() => {
+                      setsearchResults([])
+                      setcategory(item);
+                    }}
+                  >
+                    {item}
+                  </Nav.Link>
+                ))}
             </Nav>
             <Form className="d-flex">
               <Form.Control
@@ -42,8 +74,11 @@ const Header = () => {
                 placeholder="Search content"
                 className="me-2"
                 aria-label="Search"
+                onChange={(e) => handleInput(e)}
               />
-              <Button variant="outline-success">Search</Button>
+              <Button variant="outline-success" onClick={searchTermFetch}>
+                Search
+              </Button>
             </Form>
           </Navbar.Collapse>
         </Container>
